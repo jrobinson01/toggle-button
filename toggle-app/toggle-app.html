@@ -1,0 +1,64 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/toggle-switch/toggle-switch.html">
+
+<dom-module id="toggle-app">
+  <template>
+
+    <style>
+      :host{
+        display:block;
+      }
+      .errorMsg {
+        color:red;
+      }
+    </style>
+
+    <toggle-switch id="mySwitch" status="[[thing.enabled]]" on-toggle="onToggle"></toggle-switch>
+    <div class="errorMsg">[[errorMsg]]</div>
+
+  </template>
+  <script>
+    class ToggleApp extends Polymer.Element {
+      static get is() { return 'toggle-app'; };
+      static get config(){
+        return {
+          properties:{
+            thing:{
+              type:Object,
+              value:{enabled:false},
+              readOnly:true
+            },
+            errorMsg:{
+              type:String,
+              value:''
+            }
+          }
+        };
+      };
+
+      onToggle(event) {
+        console.log('toggling. switch prop:', event.detail);
+        console.log('my prop:', this.thing.enabled);
+        this.errorMsg = '';
+        setTimeout(()=> {
+          // fake a 50% chance of the async op succeeding.
+          let rn = Math.round(Math.random() * 1);
+          if(rn === 1) {
+            //success
+            this._setThing(Object.assign(this.thing, {enabled:event.detail.enabled}));
+            this.$.mySwitch.loading = false;
+          } else {
+            //failure.
+            console.log('reverting switch?..', this.thing.enabled);
+            this.$.mySwitch.enabled = this.thing.enabled;
+            this.$.mySwitch.loading = false;
+            this.errorMsg = 'oops. something went wrong.';
+          }
+        }, 500);
+      };
+
+    };
+
+    customElements.define(ToggleApp.is, ToggleApp);
+  </script>
+</dom-module>

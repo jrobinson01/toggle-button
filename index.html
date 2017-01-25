@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <title>toggle switch</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+  <style>
+    html {
+      padding: 5px;
+    }
+    html,
+    body,
+    seymour-app {
+      margin: 0;
+      display: block;
+      overflow: auto;
+      -webkit-font-smoothing: antialiased;
+      -webkit-overflow-scrolling: touch;
+      -ms-overflow-style: -ms-autohiding-scrollbar;
+      font-family: sans-serif;
+    }
+  </style>
+
+  <!-- wc polyfill (TODO: load based on feature detection) -->
+  <script src="/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <!-- import polymer -->
+  <link rel="import" href="/bower_components/polymer/polymer.html">
+  <!-- main app element -->
+  <link rel="import" href="toggle-app/toggle-app.html">
+
+</head>
+<body>
+  <toggle-app></toggle-app>
+</body>
+</html>

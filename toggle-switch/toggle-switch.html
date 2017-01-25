@@ -1,0 +1,60 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+
+<dom-module id="toggle-switch">
+  <template>
+
+    <style>
+      :host{
+        display: block;
+      }
+      .loading {
+        color: gray;
+      }
+    </style>
+    <div class$="[[loadingClass]]">
+      <div on-click="toggleStatus">[[enabled]]</div>
+      <template is="dom-if" if="[[loading]]">
+        loading...
+      </template>
+    </div>
+  </template>
+  <script>
+    class ToggleSwitch extends Polymer.Element {
+      static get is() { return 'toggle-switch'; };
+      static get config(){
+        return {
+          properties:{
+            enabled: {
+              type:Boolean,
+              value:false
+            },
+            loading: {
+              type:Boolean,
+              value:false
+            },
+            loadingClass:{
+              type:String,
+              value:'',
+              computed:'computeLoadingClass(loading)'
+            }
+          }
+        };
+      };
+
+      toggleStatus(event) {
+        if(!this.loading) {
+          this.enabled = !this.enabled;
+          this.loading = true;
+          this.dispatchEvent(new CustomEvent('toggle', {detail:{enabled:this.enabled}}));
+        }
+      };
+
+      computeLoadingClass(loading) {
+        console.log('computeLoadingClass', loading);
+        return loading ? 'loading' : '';
+      };
+    };
+
+    customElements.define(ToggleSwitch.is, ToggleSwitch);
+  </script>
+</dom-module>
