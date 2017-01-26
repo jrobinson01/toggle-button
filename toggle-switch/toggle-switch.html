@@ -2,21 +2,13 @@
 
 <dom-module id="toggle-switch">
   <template>
-
     <style>
       :host{
-        display: block;
-      }
-      .loading {
-        color: gray;
+        display:block;
       }
     </style>
-    <div class$="[[loadingClass]]">
-      <div on-click="toggleStatus">[[enabled]]</div>
-      <template is="dom-if" if="[[loading]]">
-        loading...
-      </template>
-    </div>
+      <input type="checkbox" name="onoffswitch" on-click="toggleChecked" id="myonoffswitch" checked="[[checked]]" disabled="[[disabled]]"></input>
+      <label class="onoffswitch-label" for="myonoffswitch">[[label]]</label>
   </template>
   <script>
     class ToggleSwitch extends Polymer.Element {
@@ -24,35 +16,29 @@
       static get config(){
         return {
           properties:{
-            enabled: {
+            checked: {
               type:Boolean,
               value:false
             },
-            loading: {
+            disabled: {
               type:Boolean,
               value:false
             },
-            loadingClass:{
-              type:String,
-              value:'',
-              computed:'computeLoadingClass(loading)'
+            label:{
+              type:String
             }
           }
         };
       };
 
-      toggleStatus(event) {
-        if(!this.loading) {
-          this.enabled = !this.enabled;
-          this.loading = true;
-          this.dispatchEvent(new CustomEvent('toggle', {detail:{enabled:this.enabled}}));
+      toggleChecked(event) {
+        if(!this.disabled) {
+          this.checked = !this.checked;
+          this.disabled = true;
+          this.dispatchEvent(new CustomEvent('toggle', {detail:{checked:this.checked}}));
         }
       };
 
-      computeLoadingClass(loading) {
-        console.log('computeLoadingClass', loading);
-        return loading ? 'loading' : '';
-      };
     };
 
     customElements.define(ToggleSwitch.is, ToggleSwitch);

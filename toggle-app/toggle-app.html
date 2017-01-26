@@ -13,7 +13,7 @@
       }
     </style>
 
-    <toggle-switch id="mySwitch" status="[[thing.enabled]]" on-toggle="onToggle"></toggle-switch>
+    <toggle-switch id="mySwitch" label="my switch" checked="[[thing.enabled]]" on-toggle="onToggle"></toggle-switch>
     <div class="errorMsg">[[errorMsg]]</div>
 
   </template>
@@ -25,7 +25,7 @@
           properties:{
             thing:{
               type:Object,
-              value:{enabled:false},
+              value:{enabled:true},
               readOnly:true
             },
             errorMsg:{
@@ -37,23 +37,18 @@
       };
 
       onToggle(event) {
-        console.log('toggling. switch prop:', event.detail);
-        console.log('my prop:', this.thing.enabled);
         this.errorMsg = '';
         setTimeout(()=> {
           // fake a 50% chance of the async op succeeding.
-          let rn = Math.round(Math.random() * 1);
-          if(rn === 1) {
-            //success
-            this._setThing(Object.assign(this.thing, {enabled:event.detail.enabled}));
-            this.$.mySwitch.loading = false;
+          if(Math.round(Math.random() * 1) === 1) {
+            //success, update our data.
+            this._setThing(Object.assign(this.thing, {enabled:event.detail.checked}));
           } else {
-            //failure.
-            console.log('reverting switch?..', this.thing.enabled);
-            this.$.mySwitch.enabled = this.thing.enabled;
-            this.$.mySwitch.loading = false;
+            //failure. show an errorMsg, reset switch.
             this.errorMsg = 'oops. something went wrong.';
+            this.$.mySwitch.checked = this.thing.enabled;
           }
+          this.$.mySwitch.disabled = false;//re-enable the switch
         }, 500);
       };
 
